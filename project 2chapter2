@@ -1,0 +1,155 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// -----------------------------
+// Base class: Student
+// -----------------------------
+class Student {
+protected:
+    string name;
+    int id;
+
+public:
+    // Constructor
+    Student(string name, int id) : name(name), id(id) {}
+
+    // Virtual function to display student info (for polymorphism)
+    virtual void displayInfo() {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+    }
+
+    // Function to get ID (used for deleting)
+    int getID() {
+        return id;
+    }
+
+    // Virtual destructor (good practice for base class with virtual functions)
+    virtual ~Student() {}
+};
+
+// -----------------------------
+// Derived class: Undergraduate Student
+// -----------------------------
+class Undergraduate : public Student {
+    string major;
+
+public:
+    Undergraduate(string name, int id, string major)
+        : Student(name, id), major(major) {}
+
+    // Overriding displayInfo (polymorphism)
+    void displayInfo() override {
+        cout << "[Undergraduate Student]" << endl;
+        Student::displayInfo(); // Call base class display
+        cout << "Major: " << major << endl;
+    }
+};
+
+// -----------------------------
+// Derived class: Graduate Student
+// -----------------------------
+class Graduate : public Student {
+    string thesisTitle;
+
+public:
+    Graduate(string name, int id, string thesisTitle)
+        : Student(name, id), thesisTitle(thesisTitle) {}
+
+    // Overriding displayInfo (polymorphism)
+    void displayInfo() override {
+        cout << "[Graduate Student]" << endl;
+        Student::displayInfo(); // Call base class display
+        cout << "Thesis Title: " << thesisTitle << endl;
+    }
+};
+
+// -----------------------------
+// Main Program
+// -----------------------------
+int main() {
+    vector<Student*> studentList;  // Store list of students (base class pointers)
+    int choice;
+
+    do {
+        cout << "\n===== Student Management System =====\n";
+        cout << "1. Add Undergraduate Student\n";
+        cout << "2. Add Graduate Student\n";
+        cout << "3. Display All Students\n";
+        cout << "4. Delete Student by ID\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            string name, major;
+            int id;
+            cin.ignore();
+            cout << "Enter name: ";
+            getline(cin, name);
+            cout << "Enter ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter major: ";
+            getline(cin, major);
+            studentList.push_back(new Undergraduate(name, id, major));
+            cout << "Undergraduate student added.\n";
+        }
+        else if (choice == 2) {
+            string name, thesis;
+            int id;
+            cin.ignore();
+            cout << "Enter name: ";
+            getline(cin, name);
+            cout << "Enter ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter thesis title: ";
+            getline(cin, thesis);
+            studentList.push_back(new Graduate(name, id, thesis));
+            cout << "Graduate student added.\n";
+        }
+        else if (choice == 3) {
+            cout << "\n--- Student List ---\n";
+            for (Student* s : studentList) {
+                s->displayInfo();   // Calls correct version using polymorphism
+                cout << "-------------------\n";
+            }
+        }
+        else if (choice == 4) {
+            int deleteID;
+            cout << "Enter ID to delete: ";
+            cin >> deleteID;
+            bool found = false;
+
+            for (auto it = studentList.begin(); it != studentList.end(); ++it) {
+                if ((*it)->getID() == deleteID) {
+                    delete *it;               // Free memory
+                    studentList.erase(it);    // Remove from list
+                    found = true;
+                    cout << "Student deleted.\n";
+                    break;
+                }
+            }
+
+            if (!found) {
+                cout << "Student with ID " << deleteID << " not found.\n";
+            }
+        }
+        else if (choice == 5) {
+            cout << "Exiting the system.\n";
+        }
+        else {
+            cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 5);
+
+    // Clean up memory
+    for (Student* s : studentList) {
+        delete s;
+    }
+
+    return 0;
+}
