@@ -1,0 +1,15 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+   string choice;
+   cout<<"library management system\n\n";
+   cout<<"[1]add book\n";
+   cout<<"[2]search book\n";
+   cout<<"[3]borrow book\n";
+   cout<<"[4]return book\n";
+   cout<<"exit\n\n";
+   cout<<"enter choice";
+   cin>>choice;
+   return 0 ;
+   }
