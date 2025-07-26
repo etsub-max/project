@@ -2,36 +2,28 @@
 #include <vector>
 using namespace std;
 
-// -----------------------------
 // Base class: Student
-// -----------------------------
 class Student {
 protected:
     string name;
     int id;
 
 public:
-    // Constructor
     Student(string name, int id) : name(name), id(id) {}
 
-    // Virtual function to display student info (for polymorphism)
     virtual void displayInfo() {
         cout << "Name: " << name << endl;
         cout << "ID: " << id << endl;
     }
 
-    // Function to get ID (used for deleting)
     int getID() {
         return id;
     }
 
-    // Virtual destructor (good practice for base class with virtual functions)
     virtual ~Student() {}
 };
 
-// -----------------------------
-// Derived class: Undergraduate Student
-// -----------------------------
+// Derived class: Undergraduate
 class Undergraduate : public Student {
     string major;
 
@@ -39,17 +31,14 @@ public:
     Undergraduate(string name, int id, string major)
         : Student(name, id), major(major) {}
 
-    // Overriding displayInfo (polymorphism)
     void displayInfo() override {
         cout << "[Undergraduate Student]" << endl;
-        Student::displayInfo(); // Call base class display
+        Student::displayInfo();
         cout << "Major: " << major << endl;
     }
 };
 
-// -----------------------------
-// Derived class: Graduate Student
-// -----------------------------
+// Derived class: Graduate
 class Graduate : public Student {
     string thesisTitle;
 
@@ -57,19 +46,15 @@ public:
     Graduate(string name, int id, string thesisTitle)
         : Student(name, id), thesisTitle(thesisTitle) {}
 
-    // Overriding displayInfo (polymorphism)
     void displayInfo() override {
         cout << "[Graduate Student]" << endl;
-        Student::displayInfo(); // Call base class display
+        Student::displayInfo();
         cout << "Thesis Title: " << thesisTitle << endl;
     }
 };
 
-// -----------------------------
-// Main Program
-// -----------------------------
 int main() {
-    vector<Student*> studentList;  // Store list of students (base class pointers)
+    vector<Student*> studentList;
     int choice;
 
     do {
@@ -77,8 +62,7 @@ int main() {
         cout << "1. Add Undergraduate Student\n";
         cout << "2. Add Graduate Student\n";
         cout << "3. Display All Students\n";
-        cout << "4. Delete Student by ID\n";
-        cout << "5. Exit\n";
+        cout << "4. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -113,40 +97,20 @@ int main() {
         else if (choice == 3) {
             cout << "\n--- Student List ---\n";
             for (Student* s : studentList) {
-                s->displayInfo();   // Calls correct version using polymorphism
+                s->displayInfo();
                 cout << "-------------------\n";
             }
         }
         else if (choice == 4) {
-            int deleteID;
-            cout << "Enter ID to delete: ";
-            cin >> deleteID;
-            bool found = false;
-
-            for (auto it = studentList.begin(); it != studentList.end(); ++it) {
-                if ((*it)->getID() == deleteID) {
-                    delete *it;               // Free memory
-                    studentList.erase(it);    // Remove from list
-                    found = true;
-                    cout << "Student deleted.\n";
-                    break;
-                }
-            }
-
-            if (!found) {
-                cout << "Student with ID " << deleteID << " not found.\n";
-            }
-        }
-        else if (choice == 5) {
             cout << "Exiting the system.\n";
         }
         else {
             cout << "Invalid choice. Try again.\n";
         }
 
-    } while (choice != 5);
+    } while (choice != 4);
 
-    // Clean up memory
+    // Clean up memory before exit
     for (Student* s : studentList) {
         delete s;
     }
