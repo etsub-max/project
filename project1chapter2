@@ -8,8 +8,21 @@ int main() {
    cout<<"[2]search book\n";
    cout<<"[3]borrow book\n";
    cout<<"[4]return book\n";
-   cout<<"exit\n\n";
+   cout<<"[5]exit\n\n";
    cout<<"enter choice";
    cin>>choice;
+   if (choice == "1") {
+        cout << "Adding a book..." << endl;
+    } else if (choice == "2") {
+        cout << "searching a book..." << endl;
+    } else if (choice == "3" ) {
+        cout << "borrow a book" << endl;
+    } else if(choice =="4") {
+    	cout<<"return a book"<<endl;
+    } else if(choice=="5" ) {
+    	cout<<"exit"<<endl;	
+    } else {
+        cout << "Invalid choice!" << endl;
+    }   
    return 0 ;
    }
